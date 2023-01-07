@@ -18,7 +18,7 @@ def args_parser():
         "--model",
         "-m",
         type=str,
-        default="CNN",
+        default="ResNet",
         help="model to use",
         choices=["CNN", "ResNet"],
     )

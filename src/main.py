@@ -9,39 +9,41 @@ from utils.utils import (
     create_dir_if_not_exists,
     get_num_of_models,
     evaluate_model,
+    save_results,
 )
 from utils.options import args_parser
 from model.CNN import CNN
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
 
 def train(
+    args,
     model,
-    num_epochs,
     train_dataloader,
     val_dataloader,
     test_dataloader,
     lr_scheduler,
-    model_name,
     optimizer,
     loss_fn,
 ):
-    create_dir_if_not_exists(f"../models/{model_name}")
-    model_num = get_num_of_models(model_name)
-    model.to(device)
+    create_dir_if_not_exists(f"../models/{args.model}")
+    model_num = get_num_of_models(args.model)
+    model.to(args.device)
     max_acc = 0
     torch.save(
-        model.state_dict(), f"../models/{model_name}/{model_name}_{model_num}.pt"
+        model.state_dict(), f"../models/{args.model}/{args.model}_{model_num}.pt"
     )
-    train_loss, train_acc = [0] * num_epochs, [0] * num_epochs
-    val_loss, val_acc = [0] * num_epochs, [0] * num_epochs
-    test_loss, test_acc = [0] * num_epochs, [0] * num_epochs
-    for epoch in range(num_epochs):
+    train_loss, train_acc = [0] * args.epochs, [0] * args.epochs
+    val_loss, val_acc = [0] * args.epochs, [0] * args.epochs
+    test_loss, test_acc = [0] * args.epochs, [0] * args.epochs
+    count = 0
+    for epoch in range(args.epochs):
+        if count == 10:
+            break
+        count += 1
         start_time = time.time()
         model.train()
         for x_batch, y_batch in train_dataloader:
-            x_batch, y_batch = x_batch.to(device), y_batch.to(device)
+            x_batch, y_batch = x_batch.to(args.device), y_batch.to(args.device)
             pred = model(x_batch)
             loss = loss_fn(pred, y_batch)
             optimizer.zero_grad()
@@ -56,7 +58,7 @@ def train(
         model.eval()
         with torch.no_grad():
             for x_batch, y_batch in val_dataloader:
-                x_batch, y_batch = x_batch.to(device), y_batch.to(device)
+                x_batch, y_batch = x_batch.to(args.device), y_batch.to(args.device)
                 pred = model(x_batch)
                 loss = loss_fn(pred, y_batch)
                 val_loss[epoch] += loss.item() * y_batch.size(0)
@@ -66,17 +68,18 @@ def train(
         val_acc[epoch] /= len(val_dataloader.dataset)
         lr_scheduler.step()
         if val_acc[epoch] > max_acc:
+            count = 0
             max_acc = val_acc[epoch]
             torch.save(
                 model.state_dict(),
-                f"../models/{model_name}/{model_name}_{model_num}.pt",
+                f"../models/{args.model}/{args.model}_{model_num}.pt",
             )
         test_loss[epoch], test_acc[epoch] = evaluate_model(
-            model, test_dataloader, loss_fn, device
+            model, test_dataloader, loss_fn, args.device
         )
         end_time = time.time()
         print(
-            f"Epoch {epoch+1:>2}/{num_epochs} | Train Loss: {train_loss[epoch]:.4f} | Train Acc: {train_acc[epoch]:.4f}",
+            f"Epoch {epoch+1:>2}/{args.epochs} | Train Loss: {train_loss[epoch]:.4f} | Train Acc: {train_acc[epoch]:.4f}",
             end=" | ",
         )
         print(
@@ -89,11 +92,23 @@ def train(
         )
         print(f"Time taken: {end_time - start_time:.2f} seconds")
 
-    return train_loss, val_loss, train_acc, val_acc
+    return {
+        "train_loss": train_loss,
+        "train_acc": train_acc,
+        "val_loss": val_loss,
+        "val_acc": val_acc,
+        "test_loss": test_loss,
+        "test_acc": test_acc,
+    }
 
 
 def main():
     args = args_parser()
+    download_data()
+
+    args.device = torch.device(
+        f"cuda:{args.device_id}" if torch.cuda.is_available() else "cpu"
+    )
 
     train_dataloader, val_dataloader, test_dataloader = get_data_loaders(
         args.batch_size
@@ -104,7 +119,7 @@ def main():
         features = list(model.fc.parameters())[0].shape[1]
         model.fc = nn.Linear(features, args.num_classes)
     elif (args.model).lower() == "cnn":
-        model = CNN()
+        model = CNN(args.num_classes)
 
     loss_fn = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
@@ -114,18 +129,18 @@ def main():
     )
 
     hist = train(
+        args,
         model,
-        args.epochs,
         train_dataloader,
         val_dataloader,
         test_dataloader,
         exp_lr_scheduler,
-        args.model,
         optimizer,
         loss_fn,
     )
 
+    save_results(args, hist)
+
 
 if __name__ == "__main__":
-    download_data()
     main()

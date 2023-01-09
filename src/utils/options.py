@@ -15,6 +15,12 @@ def args_parser():
         "--num_classes", "-nc", type=int, default=15, help="number of classes"
     )
     parser.add_argument(
+        "--device_id", "-d", type=int, default=0, help="device id to use"
+    )
+    parser.add_argument(
+        "--device", "-dev", type=str, default="cuda", help="device to use"
+    )
+    parser.add_argument(
         "--model",
         "-m",
         type=str,

@@ -1,6 +1,7 @@
 import os
 import json
 import glob
+import h5py
 import torch
 
 os.environ["KAGGLE_USERNAME"] = json.load(open("kaggle.json"))["username"]
@@ -35,6 +36,17 @@ def get_num_of_models(model_name):
 def create_dir_if_not_exists(dir_path):
     if not os.path.exists(dir_path):
         os.mkdir(dir_path)
+
+
+def save_results(args, results):
+    create_dir_if_not_exists("../results")
+    create_dir_if_not_exists(f"../results/{args.model}")
+
+    filename = f"../results/{args.model}/{args.model}_bs{args.batch_size}_lr{args.learning_rate}_epochs{args.epochs}.h5"
+
+    with h5py.File(filename, "w") as f:
+        for key, value in results.items():
+            f.create_dataset(key, data=value)
 
 
 def download_data():

@@ -3,3 +3,4 @@ streamlit
 h5py
 torch
 torchvision
+pillow

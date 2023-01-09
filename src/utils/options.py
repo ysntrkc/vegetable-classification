@@ -26,7 +26,7 @@ def args_parser():
         type=str,
         default="ResNet",
         help="model to use",
-        choices=["CNN", "ResNet"],
+        choices=["CNN", "cnn", "ResNet", "resnet"],
     )
 
     args = parser.parse_args()

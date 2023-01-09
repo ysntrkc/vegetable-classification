@@ -1,7 +1,6 @@
 data/
 *kaggle.json
 
-*.pt
 *.pyc
 *.zip
 *.out

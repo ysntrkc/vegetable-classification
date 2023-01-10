@@ -60,8 +60,12 @@ resnet_model = resnet18(weights=ResNet18_Weights.IMAGENET1K_V1)
 features = list(resnet_model.fc.parameters())[0].shape[1]
 resnet_model.fc = torch.nn.Linear(features, 15)
 
-cnn_model.load_state_dict(torch.load("./models/cnn.pt"))
-resnet_model.load_state_dict(torch.load("./models/resnet.pt"))
+cnn_model.load_state_dict(
+    torch.load("./models/cnn.pt", map_location=torch.device("cpu"))
+)
+resnet_model.load_state_dict(
+    torch.load("./models/resnet.pt", map_location=torch.device("cpu"))
+)
 
 if uploaded_file is not None:
     image = Image.open(uploaded_file)

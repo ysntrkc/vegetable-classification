@@ -17,14 +17,14 @@ col1, _, col2, _, col3 = st.columns([4, 1, 4, 1, 4])
 
 for i in range(0, len(sample_images), 3):
     with col1:
-        caption = sample_images[i].split("\\")[-1].split(".")[0]
+        caption = sample_images[i].split("\\")[-1].split(".")[0].split("/")[-1]
         st.image(sample_images[i], width=150, caption=caption)
         st.write("")
     with col2:
-        caption = sample_images[i + 1].split("\\")[-1].split(".")[0]
+        caption = sample_images[i + 1].split("\\")[-1].split(".")[0].split("/")[-1]
         st.image(sample_images[i + 1], width=150, caption=caption)
         st.write("")
     with col3:
-        caption = sample_images[i + 2].split("\\")[-1].split(".")[0]
+        caption = sample_images[i + 2].split("\\")[-1].split(".")[0].split("/")[-1]
         st.image(sample_images[i + 2], width=150, caption=caption)
         st.write("")

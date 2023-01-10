@@ -25,6 +25,6 @@ st.markdown(
 st.subheader("Data Preparation")
 st.write(
     """
-	The dataset consists of 21000 images and the size of each image is 224x224 in .jpg format. It contains 3 folders for each class as train, test and validation. We split the dataset as %70 for train, %15 for test and %15 for validation. In total we have 15 different classes such as: Bean, bitter gourd, bottle gourd, brinjal, broccoli, cabbage, capsicum, carrot, cauliflower, cucumber, papaya, potato, pumpkin, radish and tomato.
+	The dataset consists of 21000 images and the size of each image is 224x224 in .jpg format. It contains 3 folders for each class as train, test and validation. We split the dataset as %70 for train, %15 for test and %15 for validation. In total we have 15 different classes such as: Bean, bitter gourd, bottle gourd, brinjal, broccoli, cabbage, capsicum, carrot, cauliflower, cucumber, papaya, potato, pumpkin, radish and tomato.\n
 	Since the size is too large, in preprocessing step we resize all of the images to 150x150. We also applied some augmentation methods to improve our model with different versions of the images. We applied rotation, horizontal and vertical flip, color filter, blur."""
 )

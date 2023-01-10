@@ -6,3 +6,4 @@ torchvision
 pillow
 kaggle
 scikit-learn
+numpy

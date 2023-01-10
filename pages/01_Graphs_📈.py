@@ -1,6 +1,25 @@
 import h5py
+import numpy as np
 import streamlit as st
 import plotly.express as px
+
+classes = [
+    "Bean",
+    "Bitter Gourd",
+    "Bottle Gourd",
+    "Brinjal",
+    "Broccoli",
+    "Cabbage",
+    "Capsicum",
+    "Carrot",
+    "Cauliflower",
+    "Cucumber",
+    "Papaya",
+    "Potato",
+    "Pumpkin",
+    "Radish",
+    "Tomato",
+]
 
 
 def plot(model_name, model_results, metric):
@@ -11,10 +30,10 @@ def plot(model_name, model_results, metric):
     )
     fig.update_yaxes(title_text=metric)
     fig.update_xaxes(title_text="Epochs")
-    st.plotly_chart(fig, use_container_width=False)
+    st.plotly_chart(fig, use_container_width=True)
 
 
-st.set_page_config(page_title="Graphs", page_icon="📈", layout="wide")
+st.set_page_config(page_title="Graphs", page_icon="📈", layout="centered")
 st.title("Model Results")
 
 st.write("---")
@@ -40,32 +59,45 @@ st.write(
 	"""
 )
 
-col_1, _, col_2, _ = st.columns([6, 1, 6, 2])
+# plot cnn model loss
+plot("CNN", test_loss_cnn, "Loss")
 
-with col_1:
-    # plot cnn model loss
-    plot("CNN", test_loss_cnn, "Loss")
+# plot cnn model accuracy
+plot("CNN", test_acc_cnn, "Accuracy")
 
-with col_2:
-    # plot cnn model accuracy
-    plot("CNN", test_acc_cnn, "Accuracy")
+conf_matrix = np.load("files/cnn_conf_matrix.npy")
+fig = px.imshow(
+    conf_matrix,
+    labels=dict(x="Predicted", y="Actual", color="Count"),
+    x=classes,
+    y=classes,
+    title="CNN Confusion Matrix",
+)
+st.plotly_chart(fig, use_container_width=True)
 
 st.write("---")
 
 st.subheader("ResNet Model Results")
 st.write(
     """
-	The ResNet18 model was trained with a batch size of 64, learning rate of 0.001 and 100 epochs. But the model was converge faster. So, the program stopped the training at 22nd epoch.
+    We used ResNet18 as a pretrained model. We didn't train it. We just changed the last layer of the model and finetuned it with our data.
+	\nThe ResNet18 model was trained with a batch size of 64, learning rate of 0.001 and 100 epochs. But the model was converge faster. So, the program stopped the training at 22nd epoch.
     \nWe got 99% test accuracy with ResNet18 model. It's a great result. But even we applied data augmentation to train data and test results are better than train, I think the model is overfiting. Because images in the train and test data are very similar.
 	"""
 )
 
-col_1, _, col_2, _ = st.columns([6, 1, 6, 2])
+# plot resnet model loss
+plot("ResNet", test_loss_resnet, "Loss")
 
-with col_1:
-    # plot resnet model loss
-    plot("ResNet", test_loss_resnet, "Loss")
+# plot resnet model accuracy
+plot("ResNet", test_acc_resnet, "Accuracy")
 
-with col_2:
-    # plot resnet model accuracy
-    plot("ResNet", test_acc_resnet, "Accuracy")
+conf_matrix = np.load("files/resnet_conf_matrix.npy")
+fig = px.imshow(
+    conf_matrix,
+    labels=dict(x="Predicted", y="Actual", color="Count"),
+    x=classes,
+    y=classes,
+    title="ResNet Confusion Matrix",
+)
+st.plotly_chart(fig, use_container_width=True)

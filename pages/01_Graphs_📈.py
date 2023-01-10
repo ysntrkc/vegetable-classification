@@ -36,6 +36,7 @@ st.subheader("CNN Model Results")
 st.write(
     """
 	The CNN model was trained with a batch size of 64, learning rate of 0.001 and 100 epochs. But the model was converge faster. So, the program stopped the training at 30th epoch.
+    \nSome CNN implementations on Kaggle have 91-95% test accuracy. But we got only 71% test accuracy. The reason is that we didn't made any hyperparameter optimization. If we do that, we can get better results.
 	"""
 )
 
@@ -55,6 +56,7 @@ st.subheader("ResNet Model Results")
 st.write(
     """
 	The ResNet18 model was trained with a batch size of 64, learning rate of 0.001 and 100 epochs. But the model was converge faster. So, the program stopped the training at 22nd epoch.
+    \nWe got 99% test accuracy with ResNet18 model. It's a great result. But even we applied data augmentation to train data and test results are better than train, I think the model is overfiting. Because images in the train and test data are very similar.
 	"""
 )
 

@@ -4,3 +4,5 @@ h5py
 torch
 torchvision
 pillow
+kaggle
+scikit-learn

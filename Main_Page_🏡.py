@@ -50,6 +50,8 @@ def make_prediction(model, image):
 st.set_page_config(page_title="Vegetable Classifier", page_icon="🥦", layout="centered")
 st.title("Vegetable Classifier")
 
+st.write("---")
+
 uploaded_file = st.file_uploader("Choose an image...", type=["png", "jpg", "jpeg"])
 
 cnn_model = CNN(15)
@@ -68,9 +70,6 @@ if uploaded_file is not None:
 
     cnn_result = make_prediction(cnn_model, image)
     resnet_result = make_prediction(resnet_model, image)
-
-    print(cnn_result)
-    print(resnet_result)
 
     st.write(f"**CNN:** {classes[cnn_result]}")
     st.write(f"**ResNet:** {classes[resnet_result]}")

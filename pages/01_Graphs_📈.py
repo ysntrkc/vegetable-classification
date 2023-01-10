@@ -54,8 +54,8 @@ test_acc_resnet = resnet_model_results["test_acc"][
 st.subheader("CNN Model Results")
 st.write(
     """
-	The CNN model was trained with a batch size of 64, learning rate of 0.001 and 100 epochs. But the model was converge faster. So, the program stopped the training at 30th epoch.
-    \nSome CNN implementations on Kaggle have 91-95% test accuracy. But we got only 71% test accuracy. The reason is that we didn't made any hyperparameter optimization. If we do that, we can get better results.
+	The CNN model was trained with a batch size of 64, learning rate of 0.001 and 100 epochs. But the model was converge faster. So, the program stopped the training at 24th epoch.
+    \nSome CNN implementations on Kaggle have 91-95% test accuracy. But we got only 77% test accuracy. The reason is that we didn't made any hyperparameter optimization. If we do that, we can get better results.
 	"""
 )
 

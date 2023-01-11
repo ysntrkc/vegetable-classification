@@ -28,3 +28,11 @@ st.write(
 	The dataset consists of 21000 images and the size of each image is 224x224 in .jpg format. It contains 3 folders for each class as train, test and validation. We split the dataset as %70 for train, %15 for test and %15 for validation. In total we have 15 different classes such as: Bean, bitter gourd, bottle gourd, brinjal, broccoli, cabbage, capsicum, carrot, cauliflower, cucumber, papaya, potato, pumpkin, radish and tomato.\n
 	Since the size is too large, in preprocessing step we resize all of the images to 150x150. We also applied some augmentation methods to improve our model with different versions of the images. We applied rotation, horizontal and vertical flip, color filter, blur."""
 )
+st.subheader("References")
+st.write(
+    """
+    Ahmed, M. Israk & Mamun, Shahriyar & Asif, Asif. (2021). DCNN-Based Vegetable Image Classification Using Transfer Learning: A Comparative Study. 235-243. 10.1109/ICCCSP52374.2021.9465499.\n
+    Publication: [here](https://www.researchgate.net/publication/352846889_DCNN-Based_Vegetable_Image_Classification_Using_Transfer_Learning_A_Comparative_Study)\n
+    Dataset: [here](https://www.kaggle.com/datasets/misrakahmed/vegetable-image-dataset)
+	"""
+)
